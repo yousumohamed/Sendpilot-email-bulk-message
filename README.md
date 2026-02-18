@@ -1,5 +1,7 @@
 # Bulk Email Dashboard - LOCALHOST ONLY
 
+**Current Version:** 1.3.6
+
 A modern, feature-rich Django web application for sending bulk emails from your local machine. This project is configured strictly for local development and personal use using Gmail SMTP.
 
 ---
