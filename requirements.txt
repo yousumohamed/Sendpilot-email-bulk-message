@@ -1,0 +1,10 @@
+Django==4.2.9
+python-decouple==3.8
+pandas==2.1.4
+openpyxl==3.1.2
+Pillow==10.1.0
+django-crispy-forms>=2.0
+crispy-bootstrap5>=0.7
+channels>=4.0.0
+daphne>=4.0.0
+whitenoise==6.6.0

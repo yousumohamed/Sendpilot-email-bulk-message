@@ -1,0 +1,92 @@
+{% extends 'emails/base.html' %}
+
+{% block title %}Campaigns - Bulk Email Dashboard{% endblock %}
+
+{% block content %}
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    <div>
+        <h1 class="display-5 fw-bold">Email Campaigns</h1>
+        <p class="text-muted">View and manage all your email campaigns</p>
+    </div>
+    <a href="{% url 'send_email' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> New Campaign
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        {% if campaigns %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Campaign Name</th>
+                        <th>Status</th>
+                        <th>Total Emails</th>
+                        <th>Sent</th>
+                        <th>Delivered</th>
+                        <th>Failed</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for campaign in campaigns %}
+                    <tr>
+                        <td>
+                            <strong>{{ campaign.name }}</strong><br>
+                            <small class="text-muted">{{ campaign.subject|truncatewords:10 }}</small>
+                        </td>
+                        <td>
+                            {% if campaign.status == 'completed' %}
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle"></i> Completed
+                            </span>
+                            {% elif campaign.status == 'in_progress' %}
+                            <span class="badge bg-info">
+                                <i class="bi bi-arrow-repeat"></i> In Progress
+                            </span>
+                            {% elif campaign.status == 'failed' %}
+                            <span class="badge bg-danger">
+                                <i class="bi bi-x-circle"></i> Failed
+                            </span>
+                            {% else %}
+                            <span class="badge bg-warning">
+                                <i class="bi bi-clock"></i> Pending
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>{{ campaign.total_emails }}</td>
+                        <td>{{ campaign.sent_emails }}</td>
+                        <td>{{ campaign.delivered_emails }}</td>
+                        <td>
+                            {% if campaign.failed_emails > 0 %}
+                            <span class="text-danger fw-bold">{{ campaign.failed_emails }}</span>
+                            {% else %}
+                            {{ campaign.failed_emails }}
+                            {% endif %}
+                        </td>
+                        <td>{{ campaign.created_at|date:"M d, Y H:i" }}</td>
+                        <td>
+                            <a href="{% url 'campaign_detail' campaign.pk %}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-megaphone text-muted" style="font-size: 5rem;"></i>
+            <h3 class="mt-4">No campaigns yet</h3>
+            <p class="text-muted">Create your first email campaign to get started</p>
+            <a href="{% url 'send_email' %}" class="btn btn-primary mt-3">
+                <i class="bi bi-send-fill"></i> Create Campaign
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

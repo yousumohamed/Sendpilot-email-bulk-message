@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SendPilot - Bulk Email Dashboard{% endblock %}</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #1AAFBC;
+            --secondary-color: #118896;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --info-color: #3b82f6;
+            --dark-color: #1f2937;
+            --light-color: #f9fafb;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #FFFFFF;
+            min-height: 100vh;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sidebar {
+            background-color: #0f172a;
+            min-height: 100vh;
+            box-shadow: 2px 0 12px rgba(15, 23, 42, 0.5);
+        }
+
+        .sidebar .nav-link {
+            color: #9ca3af;
+            padding: 0.75rem 1.5rem;
+            margin: 0.25rem 0;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: rgba(148, 163, 184, 0.16);
+            color: #ffffff;
+        }
+
+        .sidebar .nav-link.active {
+            background-color: #1AAFBC;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .main-content {
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            padding: 2rem;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border-left: 4px solid;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card.primary {
+            border-left-color: var(--primary-color);
+        }
+
+        .stat-card.success {
+            border-left-color: var(--success-color);
+        }
+
+        .stat-card.danger {
+            border-left-color: var(--danger-color);
+        }
+
+        .stat-card.warning {
+            border-left-color: var(--warning-color);
+        }
+
+        .stat-card .icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+        }
+
+        .stat-card.primary .icon {
+            background-color: rgba(26, 175, 188, 0.08);
+            color: var(--primary-color);
+        }
+
+        .stat-card.success .icon {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .stat-card.danger .icon {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .stat-card.warning .icon {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            background-color: #ffffff;
+            color: #111827;
+            border-radius: 1rem 1rem 0 0 !important;
+            padding: 1.25rem 1.5rem;
+            font-weight: 600;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(26, 175, 188, 0.25);
+        }
+
+        .table {
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .table thead {
+            background-color: #f9fafb;
+            color: #6b7280;
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 0.5rem;
+            border: 2px solid #e5e7eb;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.1);
+        }
+
+        .alert {
+            border-radius: 0.75rem;
+            border: none;
+            padding: 1rem 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                min-height: auto;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    {% if user.is_authenticated %}
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 px-0 sidebar">
+                <div class="p-4">
+                    <h4 class="text-white mb-1">
+                        <i class="bi bi-envelope-fill me-1"></i> SendPilot
+                    </h4>
+                    <p class="text-secondary small mb-4">Email Campaign Desk</p>
+
+                    <nav class="nav flex-column">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
+                            href="{% url 'dashboard' %}">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'send_email' %}active{% endif %}"
+                            href="{% url 'send_email' %}">
+                            <i class="bi bi-send-fill"></i> Send Emails
+                        </a>
+                        <a class="nav-link {% if 'campaigns' in request.resolver_match.url_name %}active{% endif %}"
+                            href="{% url 'campaigns' %}">
+                            <i class="bi bi-megaphone-fill"></i> Campaigns
+                        </a>
+                        <a class="nav-link {% if 'templates' in request.resolver_match.url_name %}active{% endif %}"
+                            href="{% url 'templates' %}">
+                            <i class="bi bi-file-earmark-text-fill"></i> Templates
+                        </a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'analytics' %}active{% endif %}"
+                            href="{% url 'analytics' %}">
+                            <i class="bi bi-graph-up"></i> Analytics
+                        </a>
+
+                        <a class="nav-link {% if request.resolver_match.url_name == 'debug_smtp' %}active{% endif %}"
+                            href="{% url 'debug_smtp' %}">
+                            <i class="bi bi-gear-fill"></i> SMTP Debug
+                        </a>
+
+                        <hr class="text-white-50 my-3">
+
+                        <a class="nav-link" href="{% url 'logout' %}">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </nav>
+
+                    <div class="mt-4 p-3 bg-dark bg-opacity-25 rounded">
+                        <small class="text-white-50">Logged in as:</small>
+                        <p class="text-white mb-0 fw-bold">{{ user.username }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="container">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% block auth_content %}{% endblock %}
+    </div>
+    {% endif %}
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

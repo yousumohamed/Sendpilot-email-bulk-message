@@ -1,0 +1,173 @@
+Internal Server Error: /templates/2/ajax/
+Traceback (most recent call last):
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\asgiref\sync.py", line 557, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 266, in _get_response_async
+    self.check_response(response, callback)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 333, in check_response
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The view emails.views.get_template_ajax didn't return an HttpResponse object. It returned None instead.
+[35;1mHTTP GET /templates/2/ajax/ 500 [0.12, 127.0.0.1:57705][0m
+Internal Server Error: /templates/3/ajax/
+Traceback (most recent call last):
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\asgiref\sync.py", line 557, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 266, in _get_response_async
+    self.check_response(response, callback)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 333, in check_response
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The view emails.views.get_template_ajax didn't return an HttpResponse object. It returned None instead.
+[35;1mHTTP GET /templates/3/ajax/ 500 [0.09, 127.0.0.1:57705][0m
+SMTP Email Error sending to yousufmoha255@gmail.com: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-43796a6b563sm26597726f8f.12 - gsmtp')
+Traceback (most recent call last):
+  File "C:\code\Kitwe\bulk_email_dashboard\emails\utils.py", line 141, in send_email
+    msg.send(fail_silently=False)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\mail\backends\smtp.py", line 97, in open
+    self.connection.login(self.username, self.password)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\smtplib.py", line 762, in login
+    raise last_exception
+  File "C:\Python314\Lib\smtplib.py", line 751, in login
+    (code, resp) = self.auth(
+                   ~~~~~~~~~^
+        authmethod, getattr(self, method_name),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        initial_response_ok=initial_response_ok)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\smtplib.py", line 669, in auth
+    raise SMTPAuthenticationError(code, resp)
+smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-43796a6b563sm26597726f8f.12 - gsmtp')
+SMTP Email Error sending to yousufmoha255@gmail.com: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-4835d99497asm587235935e9.6 - gsmtp')
+Traceback (most recent call last):
+  File "C:\code\Kitwe\bulk_email_dashboard\emails\utils.py", line 141, in send_email
+    msg.send(fail_silently=False)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\mail\backends\smtp.py", line 97, in open
+    self.connection.login(self.username, self.password)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\smtplib.py", line 762, in login
+    raise last_exception
+  File "C:\Python314\Lib\smtplib.py", line 751, in login
+    (code, resp) = self.auth(
+                   ~~~~~~~~~^
+        authmethod, getattr(self, method_name),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        initial_response_ok=initial_response_ok)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\smtplib.py", line 669, in auth
+    raise SMTPAuthenticationError(code, resp)
+smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-4835d99497asm587235935e9.6 - gsmtp')
+SMTP Email Error sending to yousufmoha255@gmail.com: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-4837a5d562esm157433815e9.15 - gsmtp')
+Traceback (most recent call last):
+  File "C:\code\Kitwe\bulk_email_dashboard\emails\utils.py", line 141, in send_email
+    msg.send(fail_silently=False)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\mail\backends\smtp.py", line 97, in open
+    self.connection.login(self.username, self.password)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\smtplib.py", line 762, in login
+    raise last_exception
+  File "C:\Python314\Lib\smtplib.py", line 751, in login
+    (code, resp) = self.auth(
+                   ~~~~~~~~~^
+        authmethod, getattr(self, method_name),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        initial_response_ok=initial_response_ok)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\smtplib.py", line 669, in auth
+    raise SMTPAuthenticationError(code, resp)
+smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-4837a5d562esm157433815e9.15 - gsmtp')
+SMTP Email Error sending to yousufmoha255@gmail.com: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-4834d5e11f5sm459809755e9.4 - gsmtp')
+Traceback (most recent call last):
+  File "C:\code\Kitwe\bulk_email_dashboard\emails\utils.py", line 141, in send_email
+    msg.send(fail_silently=False)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\mail\backends\smtp.py", line 97, in open
+    self.connection.login(self.username, self.password)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\smtplib.py", line 762, in login
+    raise last_exception
+  File "C:\Python314\Lib\smtplib.py", line 751, in login
+    (code, resp) = self.auth(
+                   ~~~~~~~~~^
+        authmethod, getattr(self, method_name),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        initial_response_ok=initial_response_ok)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\smtplib.py", line 669, in auth
+    raise SMTPAuthenticationError(code, resp)
+smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-4834d5e11f5sm459809755e9.4 - gsmtp')
+SMTP Email Error sending to yousufmoha255@gmail.com: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-43796ac9d77sm24315882f8f.33 - gsmtp')
+Traceback (most recent call last):
+  File "C:\code\Kitwe\bulk_email_dashboard\emails\utils.py", line 141, in send_email
+    msg.send(fail_silently=False)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\mail\backends\smtp.py", line 130, in send_messages
+    new_conn_created = self.open()
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\mail\backends\smtp.py", line 97, in open
+    self.connection.login(self.username, self.password)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\smtplib.py", line 762, in login
+    raise last_exception
+  File "C:\Python314\Lib\smtplib.py", line 751, in login
+    (code, resp) = self.auth(
+                   ~~~~~~~~~^
+        authmethod, getattr(self, method_name),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        initial_response_ok=initial_response_ok)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\smtplib.py", line 669, in auth
+    raise SMTPAuthenticationError(code, resp)
+smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-43796ac9d77sm24315882f8f.33 - gsmtp')
+Internal Server Error: /templates/4/ajax/
+Traceback (most recent call last):
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\asgiref\sync.py", line 557, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 266, in _get_response_async
+    self.check_response(response, callback)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\yousu\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\base.py", line 333, in check_response
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The view emails.views.get_template_ajax didn't return an HttpResponse object. It returned None instead.
+[35;1mHTTP GET /templates/4/ajax/ 500 [0.09, 127.0.0.1:63478][0m

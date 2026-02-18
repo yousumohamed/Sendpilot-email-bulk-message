@@ -1,0 +1,171 @@
+{% extends 'emails/base.html' %}
+
+{% block title %}Send Email - Bulk Email Dashboard{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="display-5 fw-bold">Send Bulk Emails</h1>
+    <p class="text-muted">Create a new email campaign and send to multiple recipients</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-send-fill"></i> New Campaign
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" id="campaignForm">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.name.id_for_label }}" class="form-label">Campaign Name *</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                        <div class="text-danger small mt-1">{{ form.name.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.template.id_for_label }}" class="form-label">Email Template
+                            (Optional)</label>
+                        {{ form.template }}
+                        <small class="form-text text-muted">Select a template to auto-fill subject and body</small>
+                        {% if form.template.errors %}
+                        <div class="text-danger small mt-1">{{ form.template.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.subject.id_for_label }}" class="form-label">Email Subject *</label>
+                        {{ form.subject }}
+                        {% if form.subject.errors %}
+                        <div class="text-danger small mt-1">{{ form.subject.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.body.id_for_label }}" class="form-label">Email Body *</label>
+                        {{ form.body }}
+                        <small class="form-text text-muted">HTML is supported. Use placeholders like {name}, {email},
+                            etc.</small>
+                        {% if form.body.errors %}
+                        <div class="text-danger small mt-1">{{ form.body.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h5 class="mb-3"><i class="bi bi-people-fill"></i> Recipients</h5>
+
+                    <div class="mb-3">
+                        <label for="{{ form.email_list_file.id_for_label }}" class="form-label">Upload Email
+                            List</label>
+                        {{ form.email_list_file }}
+                        <small class="form-text text-muted">{{ form.email_list_file.help_text }}</small>
+                        {% if form.email_list_file.errors %}
+                        <div class="text-danger small mt-1">{{ form.email_list_file.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="text-center my-3">
+                        <span class="badge bg-secondary">OR</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.manual_emails.id_for_label }}" class="form-label">Manual Email Entry</label>
+                        {{ form.manual_emails }}
+                        <small class="form-text text-muted">{{ form.manual_emails.help_text }}</small>
+                        {% if form.manual_emails.errors %}
+                        <div class="text-danger small mt-1">{{ form.manual_emails.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="mb-3">
+                        <label for="{{ form.attachments.id_for_label }}" class="form-label">Attachments
+                            (Optional)</label>
+                        {{ form.attachments }}
+                        <small class="form-text text-muted">{{ form.attachments.help_text }}</small>
+                        {% if form.attachments.errors %}
+                        <div class="text-danger small mt-1">{{ form.attachments.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-send-fill"></i> Send Campaign
+                        </button>
+                        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Help Card -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <i class="bi bi-info-circle-fill"></i> Tips
+            </div>
+            <div class="card-body">
+                <h6>Email List Format:</h6>
+                <ul class="small">
+                    <li>CSV or Excel files supported</li>
+                    <li>Must have an "email" column</li>
+                    <li>Additional columns can be used as placeholders</li>
+                </ul>
+
+                <h6 class="mt-3">Placeholders:</h6>
+                <ul class="small">
+                    <li>Use {name}, {email}, {company}, etc.</li>
+                    <li>Placeholders will be replaced with actual data from your file</li>
+                    <li>Example: "Hello {name}!" becomes "Hello John!"</li>
+                </ul>
+
+                <h6 class="mt-3">Rate Limiting:</h6>
+                <p class="small mb-0">Emails are sent with a 1-second delay to avoid being blocked by email providers.
+                </p>
+            </div>
+        </div>
+
+        <!-- Example Template -->
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <i class="bi bi-file-earmark-text-fill"></i> Example Template
+            </div>
+            <div class="card-body">
+                <h6>Subject:</h6>
+                <code class="small">Welcome to our service, {name}!</code>
+
+                <h6 class="mt-3">Body:</h6>
+                <pre class="small bg-light p-2 rounded"><code>&lt;h1&gt;Hello {name}!&lt;/h1&gt;
+&lt;p&gt;Thank you for signing up with {email}.&lt;/p&gt;
+&lt;p&gt;We're excited to have you!&lt;/p&gt;</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-fill subject and body when template is selected
+    document.getElementById('{{ form.template.id_for_label }}').addEventListener('change', function () {
+        const templateId = this.value;
+        if (templateId) {
+            fetch(`/templates/${templateId}/ajax/`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('{{ form.subject.id_for_label }}').value = data.subject;
+                    document.getElementById('{{ form.body.id_for_label }}').value = data.body;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    });
+</script>
+{% endblock %}

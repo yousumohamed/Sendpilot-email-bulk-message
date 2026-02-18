@@ -1,0 +1,285 @@
+{% extends 'emails/base.html' %}
+
+{% block title %}{{ campaign.name }} - Campaign Details{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'campaigns' %}">Campaigns</a></li>
+            <li class="breadcrumb-item active">{{ campaign.name }}</li>
+        </ol>
+    </nav>
+
+    <h1 class="display-5 fw-bold">{{ campaign.name }}</h1>
+    <p class="text-muted">Campaign details and email list</p>
+</div>
+
+<!-- Campaign Stats -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card primary">
+            <p class="text-muted mb-1">Total Emails</p>
+            <h3 class="mb-0" id="stat-total">{{ campaign.total_emails }}</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card success">
+            <p class="text-muted mb-1">Delivered</p>
+            <h3 class="mb-0" id="stat-delivered">{{ campaign.delivered_emails }}</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card danger">
+            <p class="text-muted mb-1">Failed</p>
+            <h3 class="mb-0" id="stat-failed">{{ campaign.failed_emails }}</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card warning">
+            <p class="text-muted mb-1">Pending</p>
+            <h3 class="mb-0" id="stat-pending">{{ campaign.pending_emails }}</h3>
+        </div>
+    </div>
+</div>
+
+<!-- Campaign Info -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-info-circle-fill"></i> Campaign Information
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Status:</div>
+                    <div class="col-sm-9">
+                        {% if campaign.status == 'completed' %}
+                        <span class="badge bg-success">Completed</span>
+                        {% elif campaign.status == 'in_progress' %}
+                        <span class="badge bg-info">In Progress</span>
+                        {% elif campaign.status == 'failed' %}
+                        <span class="badge bg-danger">Failed</span>
+                        {% else %}
+                        <span class="badge bg-warning">Pending</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Subject:</div>
+                    <div class="col-sm-9">{{ campaign.subject }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Created:</div>
+                    <div class="col-sm-9">{{ campaign.created_at|date:"F d, Y H:i" }}</div>
+                </div>
+                {% if campaign.completed_at %}
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Completed:</div>
+                    <div class="col-sm-9">{{ campaign.completed_at|date:"F d, Y H:i" }}</div>
+                </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-sm-3 fw-bold">Body:</div>
+                    <div class="col-sm-9">
+                        <div class="bg-light p-3 rounded" style="max-height: 300px; overflow-y: auto;">
+                            {{ campaign.body|safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <i class="bi bi-graph-up"></i> Progress
+            </div>
+            <div class="card-body">
+                <div id="live-status" class="small text-muted mb-3">
+                    Live status: waiting for updates...
+                </div>
+                {% if campaign.total_emails > 0 %}
+                {% widthratio campaign.sent_emails campaign.total_emails 100 as progress %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Sent Progress</span>
+                        <span id="progress-percent">{{ progress }}%</span>
+                    </div>
+                    <div class="progress" style="height: 25px;">
+                        <div id="progress-bar" class="progress-bar bg-primary" role="progressbar" style="width: {{ progress }}%"></div>
+                    </div>
+                </div>
+
+                {% if campaign.sent_emails > 0 %}
+                {% widthratio campaign.delivered_emails campaign.sent_emails 100 as delivery_rate %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Delivery Rate</span>
+                        <span id="delivery-percent">{{ delivery_rate }}%</span>
+                    </div>
+                    <div class="progress" style="height: 25px;">
+                        <div id="delivery-bar" class="progress-bar bg-success" role="progressbar" style="width: {{ delivery_rate }}%">
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% else %}
+                <p class="text-muted mb-0">No emails in this campaign yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Email List -->
+<div class="card">
+    <div class="card-header">
+        <i class="bi bi-list-ul"></i> Email List
+    </div>
+    <div class="card-body">
+        {% if emails %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Recipient</th>
+                        <th>Status</th>
+                        <th>Sent At</th>
+                        <th>Error Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for email in emails %}
+                    <tr>
+                        <td>
+                            <strong>{{ email.recipient_email }}</strong>
+                            {% if email.recipient_name %}
+                            <br><small class="text-muted">{{ email.recipient_name }}</small>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if email.status == 'delivered' %}
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle"></i> Delivered
+                            </span>
+                            {% elif email.status == 'failed' %}
+                            <span class="badge bg-danger">
+                                <i class="bi bi-x-circle"></i> Failed
+                            </span>
+                            {% elif email.status == 'sent' %}
+                            <span class="badge bg-info">
+                                <i class="bi bi-send"></i> Sent
+                            </span>
+                            {% else %}
+                            <span class="badge bg-warning">
+                                <i class="bi bi-clock"></i> Pending
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if email.sent_at %}
+                            {{ email.sent_at|date:"M d, Y H:i" }}
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if email.error_message %}
+                            <span class="text-danger small">{{ email.error_message|truncatewords:10 }}</span>
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+            <p class="text-muted mb-0">No emails in this campaign.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    (function () {
+        const campaignId = "{{ campaign.id }}";
+        const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+        const wsUrl = `${protocol}://${window.location.host}/ws/campaign-progress/${campaignId}/`;
+
+        const statTotal = document.getElementById("stat-total");
+        const statDelivered = document.getElementById("stat-delivered");
+        const statFailed = document.getElementById("stat-failed");
+        const statPending = document.getElementById("stat-pending");
+
+        const progressBar = document.getElementById("progress-bar");
+        const progressPercent = document.getElementById("progress-percent");
+        const deliveryBar = document.getElementById("delivery-bar");
+        const deliveryPercent = document.getElementById("delivery-percent");
+        const liveStatus = document.getElementById("live-status");
+
+        let socket;
+
+        function connect() {
+            socket = new WebSocket(wsUrl);
+
+            socket.onopen = function () {
+                if (liveStatus) {
+                    liveStatus.textContent = "Live status: connected, waiting for email updates…";
+                }
+            };
+
+            socket.onmessage = function (event) {
+                const data = JSON.parse(event.data || "{}");
+
+                const total = data.total || 0;
+                const sent = data.sent || 0;
+                const failed = data.failed || 0;
+                const pending = data.pending != null ? data.pending : Math.max(total - (sent + failed), 0);
+                const status = data.status || "in_progress";
+
+                if (statTotal) statTotal.textContent = total;
+                if (statDelivered) statDelivered.textContent = Math.max(sent - failed, 0);
+                if (statFailed) statFailed.textContent = failed;
+                if (statPending) statPending.textContent = pending;
+
+                const progress = total ? Math.round(((sent + failed) / total) * 100) : 0;
+                const deliveredCount = Math.max(sent - failed, 0);
+                const deliveryRate = sent ? Math.round((deliveredCount / sent) * 100) : 0;
+
+                if (progressBar) progressBar.style.width = `${progress}%`;
+                if (progressPercent) progressPercent.textContent = `${progress}%`;
+
+                if (deliveryBar) deliveryBar.style.width = `${deliveryRate}%`;
+                if (deliveryPercent) deliveryPercent.textContent = `${deliveryRate}%`;
+
+                if (liveStatus) {
+                    let label = "Sending…";
+                    if (status === "completed") label = "Completed";
+                    else if (status === "failed") label = "Failed";
+
+                    liveStatus.textContent = `Live status: ${label} — ${sent} sent, ${deliveredCount} delivered, ${failed} failed, ${pending} pending.`;
+                }
+            };
+
+            socket.onclose = function () {
+                if (liveStatus) {
+                    liveStatus.textContent = "Live status: disconnected.";
+                }
+            };
+        }
+
+        if (window.WebSocket) {
+            connect();
+        } else if (liveStatus) {
+            liveStatus.textContent = "Live status: WebSocket not supported in this browser.";
+        }
+    })();
+</script>
+{% endblock %}

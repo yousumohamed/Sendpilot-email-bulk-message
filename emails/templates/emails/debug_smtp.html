@@ -1,0 +1,88 @@
+{% extends 'emails/base.html' %}
+{% block title %}SMTP Debug{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2 class="mb-4">SMTP Diagnostics</h2>
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <i class="bi bi-gear-fill"></i> Configuration Check
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th style="width: 30%">SMTP Host</th>
+                            <td>{{ smtp_host }}</td>
+                        </tr>
+                        <tr>
+                            <th>SMTP Port</th>
+                            <td>{{ smtp_port }}</td>
+                        </tr>
+                        <tr>
+                            <th>SMTP User</th>
+                            <td>
+                                {% if smtp_user %}
+                                <span class="text-success">{{ smtp_user }}</span>
+                                {% else %}
+                                <span class="text-danger">Not Set!</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>SMTP Password</th>
+                            <td>
+                                {% if smtp_password_set %}
+                                <span class="text-success">Set (Hidden)</span>
+                                {% else %}
+                                <span class="text-danger">Not Set!</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="alert alert-info small mb-0">
+                    <i class="bi bi-info-circle"></i> These values are read from your environment variables.
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-secondary text-white">
+                <i class="bi bi-lightning-charge-fill"></i> Connectivity Test
+            </div>
+            <div class="card-body">
+                <p>Click the button below to attempt sending a test email to yourself (<strong>{{ request.user.email
+                        }}</strong> or the admin email).</p>
+
+                {% if test_attempted %}
+                {% if success %}
+                <div class="alert alert-success">
+                    <h4><i class="bi bi-check-circle-fill"></i> Success!</h4>
+                    <p>The email was successfully sent to the SMTP server.</p>
+                    <hr>
+                    <p class="mb-0">Please check your inbox (and spam folder) for an email with subject "SMTP Test
+                        Email".</p>
+                </div>
+                {% else %}
+                <div class="alert alert-danger">
+                    <h4><i class="bi bi-exclamation-triangle-fill"></i> Failed!</h4>
+                    <p>Could not send email. Error details:</p>
+                    <pre class="bg-light p-3 border rounded text-danger">{{ error_log }}</pre>
+                </div>
+                {% endif %}
+                {% endif %}
+
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-lg btn-primary w-100">
+                        <i class="bi bi-play-circle-fill"></i> Run SMTP Test
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'emails/base.html' %}
+
+{% block title %}Delete Template - {{ template.name }}{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'templates' %}">Templates</a></li>
+            <li class="breadcrumb-item active">Delete {{ template.name }}</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <i class="bi bi-exclamation-triangle-fill"></i> Confirm Deletion
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Are you sure you want to delete this template?</h5>
+                <p class="card-text">
+                    <strong>Template Name:</strong> {{ template.name }}<br>
+                    <strong>Subject:</strong> {{ template.subject }}
+                </p>
+                <p class="text-danger">
+                    <i class="bi bi-exclamation-circle"></i> This action cannot be undone!
+                </p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Yes, Delete Template
+                        </button>
+                        <a href="{% url 'templates' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

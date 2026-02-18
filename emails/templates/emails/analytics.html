@@ -1,0 +1,247 @@
+{% extends 'emails/base.html' %}
+
+{% block title %}Analytics - Bulk Email Dashboard{% endblock %}
+
+{% block content %}
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    <div>
+        <h1 class="display-5 fw-bold">Email Analytics</h1>
+        <p class="text-muted">Detailed insights into your email campaigns</p>
+    </div>
+    <a href="{% url 'download_analytics' %}" class="btn btn-success">
+        <i class="bi bi-download"></i> Download CSV
+    </a>
+</div>
+
+<!-- Status Breakdown -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-pie-chart-fill"></i> Email Status Breakdown
+            </div>
+            <div class="card-body">
+                <canvas id="statusChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-bar-chart-fill"></i> Status Summary
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Count</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for status in status_breakdown %}
+                            <tr>
+                                <td>
+                                    {% if status.status == 'delivered' %}
+                                    <span class="badge bg-success">Delivered</span>
+                                    {% elif status.status == 'failed' %}
+                                    <span class="badge bg-danger">Failed</span>
+                                    {% elif status.status == 'sent' %}
+                                    <span class="badge bg-info">Sent</span>
+                                    {% else %}
+                                    <span class="badge bg-warning">Pending</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ status.count }}</td>
+                                <td>
+                                    {% widthratio status.count status_breakdown|length 100 as percentage %}
+                                    {{ percentage }}%
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Emails Per Day Chart -->
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="bi bi-graph-up"></i> Email Activity (Last 30 Days)
+    </div>
+    <div class="card-body">
+        <canvas id="emailsPerDayChart" height="100"></canvas>
+    </div>
+</div>
+
+<!-- Campaign Statistics -->
+<div class="card">
+    <div class="card-header">
+        <i class="bi bi-megaphone-fill"></i> Recent Campaign Performance
+    </div>
+    <div class="card-body">
+        {% if campaign_stats %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Campaign</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th>Sent</th>
+                        <th>Failed</th>
+                        <th>Success Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for campaign in campaign_stats %}
+                    <tr>
+                        <td>{{ campaign.name }}</td>
+                        <td>
+                            {% if campaign.status == 'completed' %}
+                            <span class="badge bg-success">Completed</span>
+                            {% elif campaign.status == 'in_progress' %}
+                            <span class="badge bg-info">In Progress</span>
+                            {% elif campaign.status == 'failed' %}
+                            <span class="badge bg-danger">Failed</span>
+                            {% else %}
+                            <span class="badge bg-warning">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ campaign.total_emails }}</td>
+                        <td>{{ campaign.sent_emails }}</td>
+                        <td>{{ campaign.failed_emails }}</td>
+                        <td>
+                            {% if campaign.sent_emails > 0 %}
+                            {% widthratio campaign.sent_emails campaign.failed_emails 100 as success_rate %}
+                            {% if success_rate >= 80 %}
+                            <span class="badge bg-success">{{ success_rate }}%</span>
+                            {% elif success_rate >= 50 %}
+                            <span class="badge bg-warning">{{ success_rate }}%</span>
+                            {% else %}
+                            <span class="badge bg-danger">{{ success_rate }}%</span>
+                            {% endif %}
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+            <p class="text-muted mb-0">No campaign data available.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Status Breakdown Pie Chart
+    const statusCtx = document.getElementById('statusChart').getContext('2d');
+    const statusData = {{ status_breakdown| safe }};
+
+    const statusLabels = statusData.map(item => {
+        const status = item.status.charAt(0).toUpperCase() + item.status.slice(1);
+        return status;
+    });
+    const statusCounts = statusData.map(item => item.count);
+
+    const statusColors = {
+        'Delivered': 'rgba(16, 185, 129, 0.8)',
+        'Failed': 'rgba(239, 68, 68, 0.8)',
+        'Sent': 'rgba(59, 130, 246, 0.8)',
+        'Pending': 'rgba(245, 158, 11, 0.8)'
+    };
+
+    const backgroundColors = statusLabels.map(label => statusColors[label] || 'rgba(156, 163, 175, 0.8)');
+
+    new Chart(statusCtx, {
+        type: 'pie',
+        data: {
+            labels: statusLabels,
+            datasets: [{
+                data: statusCounts,
+                backgroundColor: backgroundColors,
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+
+    // Emails Per Day Chart
+    const emailsPerDayCtx = document.getElementById('emailsPerDayChart').getContext('2d');
+    const emailsPerDayData = {{ emails_per_day| safe }};
+
+    const dates = emailsPerDayData.map(item => {
+        const date = new Date(item.date);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    });
+    const totalCounts = emailsPerDayData.map(item => item.total);
+    const deliveredCounts = emailsPerDayData.map(item => item.delivered);
+    const failedCounts = emailsPerDayData.map(item => item.failed);
+
+    new Chart(emailsPerDayCtx, {
+        type: 'bar',
+        data: {
+            labels: dates,
+            datasets: [
+                {
+                    label: 'Delivered',
+                    data: deliveredCounts,
+                    backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                    borderColor: 'rgba(16, 185, 129, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Failed',
+                    data: failedCounts,
+                    backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                    borderColor: 'rgba(239, 68, 68, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    stacked: true
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top'
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
