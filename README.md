@@ -347,7 +347,11 @@ Features:
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+This project is dual-licensed under the [MIT License](LICENSE) and the [Apache License 2.0](LICENSE-APACHE).
+
+## 🛡️ Security
+
+For information on how to report a security vulnerability, please see our [Security Policy](SECURITY.md).
 
 ## 👨‍💻 Author
 
@@ -355,7 +359,7 @@ This project is licensed under the MIT License.
 Created with ❤️ by <a href="https://yusuf-abdi.vercel.app/" target="_blank" rel="noopener noreferrer">Yusuf</a>
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome!
+Contributions, issues, and feature requests are welcome! See our [Contributing Guidelines](CONTRIBUTING.md) for more details.
 
 ## ⭐ Show Your Support
 
