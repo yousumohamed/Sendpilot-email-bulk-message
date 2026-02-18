@@ -351,8 +351,8 @@ This project is licensed under the MIT License.
 
 ## 👨‍💻 Author
 
-Created with ❤️ by [Your Name]
 
+Created with ❤️ by <a href="https://yusuf-abdi.vercel.app/" target="_blank">Yusuf</a>
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
