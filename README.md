@@ -352,7 +352,7 @@ This project is licensed under the MIT License.
 ## 👨‍💻 Author
 
 
-Created with ❤️ by <a href="https://yusuf-abdi.vercel.app/" target="_blank">Yusuf</a>
+Created with ❤️ by <a href="https://yusuf-abdi.vercel.app/" target="_blank" rel="noopener noreferrer">Yusuf</a>
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
