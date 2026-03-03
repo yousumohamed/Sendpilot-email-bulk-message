@@ -66,7 +66,6 @@ Visit `http://localhost:8000`
   - Rate limiting (1-second delay between emails)
 - **SMTP Support:**
   - Gmail (Strictly using App Passwords)
-  - Localhost SMTP testing
 
 ### 📝 Email Templates
 - Create reusable email templates
@@ -251,7 +250,7 @@ Use placeholders in your email subject and body:
 - **Frontend:** HTML5, CSS3, Bootstrap 5
 - **Charts:** Chart.js
 - **Icons:** Bootstrap Icons
-- **Database:** SQLite (local only)
+- **Database:** SQLite 
 - **Environment:** python-decouple (.env)
 - **Email:** Django SMTP Backend
 
@@ -323,10 +322,10 @@ Features:
 - Avoid spam trigger words
 - Include unsubscribe links
 
-## 🚨 Local Sending Limits
+## 🚨  Sending Limits
 - Gmail free accounts: **500 emails per day**.
 - Recommended: **1 email per second** (the app handles this automatically).
-- **DEBUG = True** is enabled for local troubleshooting.
+- **DEBUG = True** is enabled for  troubleshooting.
 
 ### File Upload Issues
 - Check file format (CSV or Excel)
