@@ -2,6 +2,11 @@
 
 **Current Version:** v1.3.6 - "The Professional Foundation Release"
 
+<video controls width="100%">
+  <source src="remove.mp4" type="video/mp4" />
+  Your browser does not support the video tag. [Open the demo video](remove.mp4).
+</video>
+
 ### Release v1.3.6 Highlights
 
 
